@@ -1,0 +1,33 @@
+services:
+  api-pro:
+    container_name: eventsguard_api_pro
+    build:
+      args:
+        SERVICE: api
+      context: .
+      target: prod  # Utilitzem l'etapa de producció per construir la imatge
+    image: eventsguard_app
+    command: ["/prod/go-events-guard", "server"]  # Executem l'executable en producció (sense air)
+
+    volumes:
+      - .:/app:cached  # Volum per al codi font (per dev)
+      - go_cache:/go/pkg/mod:delegated  # Volum per la cache de dependències de Go
+
+    ports:
+      - 8082:8080
+    environment:
+      - SERVER_PORT=8080
+    healthcheck:
+      test: ["CMD", "go", "run", "-exec", "package main; import (\"net/http\"; \"os\"; \"time\"); func main() { client := http.Client{Timeout: 30 * time.Second}; resp, err := client.Get(\"http://localhost/health\"); if err != nil || resp.StatusCode != http.StatusOK { os.Exit(1) }; os.Exit(0) }"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+    networks:
+      - eventsguard-network
+
+volumes:
+  go_cache:
+
+networks:
+  eventsguard-network:
+    external: true
