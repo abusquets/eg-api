@@ -51,8 +51,9 @@ jobs:
       if: steps.check-image.outputs.image_exists == 'false'
       run: |
         TAG=${{ github.sha }}
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }} .
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }} -t ${{ secrets.DOCKER_USERNAME }}/eg-api:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:latest
 
     # 8. Set up kubectl
     - name: Set up kubectl
@@ -69,8 +70,8 @@ jobs:
     - name: Replace variables in manifests
       uses: franzbischoff/replace_envs@v1
       with:
-        from_file: 'k3s/deploy.yaml'
-        to_file: 'k3s/deploy.yaml'
+        from_file: 'k3s/eg-api-deploy.yaml'
+        to_file: 'k3s/eg-api-deploy.yaml'
         commit: 'false'
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -79,5 +80,5 @@ jobs:
     # 11. Deploy to Kubernetes
     - name: Deploy to Kubernetes
       run: |
-        KUBECONFIG=kubeconfig.yaml kubectl apply -f k3s/deploy.yaml
-        KUBECONFIG=kubeconfig.yaml kubectl apply -f k3s/service.yaml
+        KUBECONFIG=kubeconfig.yaml kubectl apply -f k3s/eg-api-deploy.yaml
+        KUBECONFIG=kubeconfig.yaml kubectl apply -f k3s/eg-api-service.yaml

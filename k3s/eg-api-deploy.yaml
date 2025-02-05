@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
-  namespace: events-guard
+  name: eg-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: eg-api
   template:
     metadata:
       labels:
-        app: backend
+        app: eg-api
     spec:
       containers:
-      - name: backend
+      - name: eg-api
         image: docker.io/${DOCKER_USERNAME}/eg-api:${GITHUB_SHA}
         command: ["/prod/go-events-guard", "server"]
         ports:
