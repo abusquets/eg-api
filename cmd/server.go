@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"eventsguard/internal/app"
 	"eventsguard/internal/di"
 	"eventsguard/internal/infrastructure/server"
 
@@ -19,6 +20,7 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		app := fx.New(
 			di.BaseModule,
+			app.Module,
 			server.Module,
 		)
 

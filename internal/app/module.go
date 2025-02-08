@@ -2,11 +2,11 @@
 package app
 
 import (
-	"eventsguard/internal/infrastructure/config"
+	"eventsguard/internal/hello"
 
 	"go.uber.org/fx"
 )
 
 var Module = fx.Module("app",
-	config.Module,
+	hello.Module,
 )

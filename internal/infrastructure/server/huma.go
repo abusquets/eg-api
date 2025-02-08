@@ -51,6 +51,10 @@ func NewHumaServer(
 	apiConfig.Servers = []*huma.Server{{URL: url}}
 	api := humago.NewWithPrefix(server.GetMux(), "/api", apiConfig)
 
+	// huma.Get(api, "/demo/", func(ctx context.Context, input *struct{}) (*struct{}, error) {
+	// 	return nil, nil
+	// })
+
 	for _, route := range routes {
 		route.Register(api)
 	}

@@ -25,9 +25,9 @@ func (u helloSimpleRouter) Register(
 ) {
 
 	huma.Register(api, huma.Operation{
-		OperationID:   "hello-simple",
+		OperationID:   "hello-hello",
 		Method:        http.MethodGet,
-		Path:          "/hello/hello/simple",
+		Path:          "/hello/hello",
 		Description:   "Simple Hello",
 		Tags:          []string{"Hello"},
 		DefaultStatus: http.StatusOK,

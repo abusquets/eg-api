@@ -45,6 +45,7 @@ func GetAppConfig() (*AppConfig, error) {
 	// Ensure the configuration is created only once
 	configOnce.Do(func() {
 		config = &AppConfig{
+			ServerUri:  getEnv("SERVER_URI", ""),
 			ServerPort: getEnv("SERVER_PORT", "8080"),
 			ApiName:    getEnv("API_NAME", "My API"),
 			ApiVersion: getEnv("API_VERSION", "1.0.0"),

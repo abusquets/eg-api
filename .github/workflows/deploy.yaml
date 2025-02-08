@@ -55,6 +55,14 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }}
         docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:latest
 
+    # 7.1 Always build and push Docker image
+    - name: Always Build and Push Docker image
+      run: |
+        TAG=${{ github.sha }}
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }} -t ${{ secrets.DOCKER_USERNAME }}/eg-api:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:${{ github.sha }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/eg-api:latest
+
     # 8. Set up kubectl
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
