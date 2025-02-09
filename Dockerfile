@@ -4,7 +4,7 @@ WORKDIR /app
 
 # We install necessary dependencies (including SSL certificates)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git ca-certificates libaom-dev \
+    git ca-certificates libaom-dev unzip wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Development stage
@@ -31,6 +31,13 @@ COPY --from=dev /app ./
 
 RUN CGO_ENABLED=0 go build -o go-events-guard
 
+# Download and extract the latest frontend release
+FROM base AS static
+WORKDIR /static
+RUN wget https://github.com/abusquets/eg-frontend/releases/download/latest/eg-frontend-latest.zip \
+    && unzip eg-frontend-latest.zip \
+    && rm eg-frontend-latest.zip
+
 # Production stage with Distroless
 FROM gcr.io/distroless/static-debian12 AS prod
 WORKDIR /prod
@@ -38,7 +45,10 @@ WORKDIR /prod
 # We copy the certificates by SSL
 COPY --from=base /etc/ssl/certs /etc/ssl/certs
 
+# We copy the static files from the frontend
+COPY --from=static /static ./static
+
 # We copy only the final executable
 COPY --from=builder /build/go-events-guard ./
 EXPOSE 8000
-CMD ["/prod/go-events-guard"]
+CMD ["/prod/go-events-guard", "server"]

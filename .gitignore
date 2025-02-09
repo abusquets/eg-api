@@ -6,3 +6,4 @@ no/
 mongo-keyfile
 TODO.md
 eventsguard
+fly.toml

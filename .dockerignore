@@ -1,0 +1,10 @@
+# flyctl launch added from .gitignore
+**/.history
+**/\!*
+**/.DS_Store
+**/tmp
+**/no
+**/mongo-keyfile
+**/TODO.md
+**/eventsguard
+fly.toml
